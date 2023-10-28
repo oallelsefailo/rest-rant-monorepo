@@ -36,21 +36,27 @@ function PlaceDetails() {
 	}
 
 	async function deleteComment(deletedComment) {
-		await fetch(`http://localhost:5000/places/${place.placeId}/comments/${deletedComment.commentId}`, {
-			method: 'DELETE'
-		})
+    await fetch(
+      `http://localhost:5000/places/${place.placeId}/comments/${deletedComment.commentId}`,
+      {
+        method: "DELETE",
+      }
+    );
 
-		setPlace({
-			...place,
-			comments: place.comments
-				.filter(comment => comment.commentId !== deletedComment.commentId)
-		})
-	}
+    setPlace({
+      ...place,
+      comments: place.comments.filter(
+        (comment) => comment.commentId !== deletedComment.commentId
+      ),
+    });
+  }
 
 	async function createComment(commentAttributes) {
 		const response = await fetch(`http://localhost:5000/places/${place.placeId}/comments`, {
 			method: 'POST',
+			credentials: 'include',
 			headers: {
+				'Authorizaton': `Bearer ${localStorage.getItem('token')}`,
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify(commentAttributes)
